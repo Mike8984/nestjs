@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma.service';
+import { RolesGuard } from 'src/roles/roles.guard';
+import { jwtConstants } from './constants';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { PrismaService } from 'src/prisma.service';
-import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './constants';
-import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from './auth.guard';
-import { RolesGuard } from 'src/roles/roles.guard';
 
 @Module({
   imports: [
@@ -22,11 +21,7 @@ import { RolesGuard } from 'src/roles/roles.guard';
     PrismaService,
     {
       provide: APP_GUARD,
-      useClass: AuthGuard, // Global AuthGuard to run first
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard, // Global RolesGuard to run after AuthGuard
+      useClass: RolesGuard, 
     },
   ],
 })
